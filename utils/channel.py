@@ -10,9 +10,9 @@ class Channel():
     def __init__(self, id):
         self.id = id
         self.json = ""
-        self.get_json_by_id()
+        self.get_json()
 
-    def get_json_by_id(self):
+    def get_json(self):
         with build('youtube', 'v3', developerKey=Channel.api_key) as youtube:
             channel = youtube.channels().list(id=self.id, part='snippet,statistics').execute()
             self.json = json.dumps(channel, indent=2, ensure_ascii=False)
