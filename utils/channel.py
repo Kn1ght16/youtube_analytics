@@ -4,7 +4,7 @@ from googleapiclient.discovery import build
 
 
 class Channel():
-    api_key = os.environ['YouTube-API']
+    api_key = os.environ['YouTubeAPI']
 
     # YouTube-API  переменная окружения
 
@@ -31,7 +31,7 @@ class Channel():
         """Записывает информацию о канале в файл name"""
         channel_dict = self.__dict__
         print(type(channel_dict))
-        with open(f'{name}', 'w', encoding='windows-1251') as file:
+        with open(f'{name}', 'w', encoding='utf-8') as file:
             file.write(self.json)
 
     @classmethod
