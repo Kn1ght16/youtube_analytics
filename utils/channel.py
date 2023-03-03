@@ -17,6 +17,10 @@ class Channel():
         self.video_count = Channel.get_json(self)['items'][0]['statistics']['videoCount']
         self.view_count = Channel.get_json(self)['items'][0]['statistics']['viewCount']
 
+    @property
+    def id(self):
+        return self.__id
+
     def get_json(self):
         with build('youtube', 'v3', developerKey=Channel.api_key) as youtube:
             channel = youtube.channels().list(id=self.__id, part='snippet,statistics').execute()
@@ -38,3 +42,12 @@ class Channel():
     def get_service(cls):
         with build('youtube', 'v3', developerKey=Channel.api_key) as youtube:
             return youtube
+
+    def __str__(self):
+        return f'Youtube-канал: {self.title}'
+
+    def __add__(self, other):
+        return int(self.subscriber_count) + int(other.subscriber_count)
+
+    def __lt__(self, other):
+        return self.subscriber_count > other.subscriber_count
