@@ -2,12 +2,11 @@ import json
 import os
 from googleapiclient.discovery import build
 
+# YouTube-API  переменная окружения
+api_key = os.environ['YouTubeAPI']
+
 
 class Channel():
-    api_key = os.environ['YouTubeAPI']
-
-    # YouTube-API  переменная окружения
-
     def __init__(self, id):
         self.__id = id
         self.json = ""
@@ -22,7 +21,7 @@ class Channel():
         return self.__id
 
     def get_json(self):
-        with build('youtube', 'v3', developerKey=Channel.api_key) as youtube:
+        with build('youtube', 'v3', developerKey=api_key) as youtube:
             channel = youtube.channels().list(id=self.__id, part='snippet,statistics').execute()
             self.json = json.dumps(channel, indent=2, ensure_ascii=False)
             return channel
@@ -40,7 +39,7 @@ class Channel():
 
     @classmethod
     def get_service(cls):
-        with build('youtube', 'v3', developerKey=Channel.api_key) as youtube:
+        with build('youtube', 'v3', developerKey=api_key) as youtube:
             return youtube
 
     def __str__(self):
@@ -51,3 +50,38 @@ class Channel():
 
     def __lt__(self, other):
         return self.subscriber_count > other.subscriber_count
+
+
+class Video():
+    def __init__(self, id):
+        self.__id = id
+        self.title = Video.get_channel(self)['items'][0]['snippet']['title']
+        self.likes = Video.get_channel(self)['items'][0]['statistics']['likeCount']
+        self.view_count = Video.get_channel(self)['items'][0]['statistics']['viewCount']
+
+    @classmethod
+    def get_service(cls):
+        with build('youtube', 'v3', developerKey=api_key) as youtube:
+            return youtube
+
+    def get_channel(self):
+        with build('youtube', 'v3', developerKey=api_key) as youtube:
+            channel = youtube.videos().list(id=self.__id, part='snippet,statistics').execute()
+            return channel
+
+    def __str__(self):
+        return f'Youtube-канал: {self.title}'
+
+
+class PLVideo(Video):
+    def __init__(self, id, pl_id):
+        super().__init__(id)
+        self.pl_id = pl_id
+
+    @property
+    def pl_title(self):
+        playlist = PLVideo.get_service().playlists().list(id=self.pl_id, part='snippet').execute()
+        return playlist['items'][0]['snippet']['title']
+
+    def __str__(self):
+        return f'Youtube-канал: {self.title} ({self.pl_title})'

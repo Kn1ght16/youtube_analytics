@@ -1,4 +1,4 @@
-from utils.channel import Channel
+from utils.channel import Channel, Video, PLVideo
 
 
 def main():
@@ -30,6 +30,12 @@ def main():
     print(channel < vdud)
     print(channel > vdud)
     print(channel + vdud)
+
+    # шаблон: 'название_видео (название_плейлиста)'
+    video1 = Video('9lO06Zxhu88')
+    video2 = PLVideo('BBotskuyw_M', 'PL7Ntiz7eTKwrqmApjln9u4ItzhDLRtPuD')
+    print(video1)
+    print(video2)
 
 
 if __name__ == "__main__":
