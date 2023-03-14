@@ -1,4 +1,4 @@
-from utils.channel import Channel, Video, PLVideo
+from utils.channel import Channel, Video, PLVideo, Playlist
 
 
 def main():
@@ -36,6 +36,17 @@ def main():
     video2 = PLVideo('BBotskuyw_M', 'PL7Ntiz7eTKwrqmApjln9u4ItzhDLRtPuD')
     print(video1)
     print(video2)
+
+    pl = Playlist('PLguYHBi01DWr4bRWc4uaguASmo7lW4GCb')
+    print(pl.title)
+    print(pl.url)
+
+    duration = pl.total_duration()
+    print(duration)
+    print(type(duration))
+    print(duration.total_seconds())
+
+    pl.show_best_video()
 
 
 if __name__ == "__main__":
