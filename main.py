@@ -48,6 +48,10 @@ def main():
 
     pl.show_best_video()
 
+    broken_video = Video('broken_video_id')
+    print(broken_video.title)
+    print(broken_video.likes)
 
-if __name__ == "__main__":
-    main()
+
+#if __name__ == "__main__":
+main()

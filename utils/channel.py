@@ -4,6 +4,7 @@ from googleapiclient.discovery import build
 from datetime import datetime, timedelta
 import isodate
 
+
 class MixinYT():
     @classmethod
     def get_service(cls):
@@ -56,9 +57,14 @@ class Channel(MixinYT):
 class Video(MixinYT):
     def __init__(self, id):
         self.__id = id
-        self.title = Video.get_channel(self)['items'][0]['snippet']['title']
-        self.likes = Video.get_channel(self)['items'][0]['statistics']['likeCount']
-        self.view_count = Video.get_channel(self)['items'][0]['statistics']['viewCount']
+        try:
+            self.title = Video.get_channel(self)['items'][0]['snippet']['title']
+            self.likes = Video.get_channel(self)['items'][0]['statistics']['likeCount']
+            self.view_count = Video.get_channel(self)['items'][0]['statistics']['viewCount']
+        except:
+            self.title = None
+            self.likes = None
+            self.views = None
 
     def get_channel(self):
         channel = Video.get_service().videos().list(id=self.__id, part='snippet,statistics').execute()
@@ -114,7 +120,7 @@ class Playlist(MixinYT):
         time_str = self.total_duration
         time_obj = datetime.strptime(time_str, '%H:%M:%S')
         total_seconds = time_obj.hour * 3600 + time_obj.minute * 60 + time_obj.second
-        return (total_seconds)
+        return total_seconds
 
     def show_best_video(self):
         video_list = self.video_list()
